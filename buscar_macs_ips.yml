@@ -1,0 +1,13 @@
+---
+# ejecutar asi:  ansible-playbook playbooks/buscar_macs_ips.yml -e "filter=IP O MAC" 
+- hosts: L3
+  gather_facts: false
+  tasks:
+   - name: Buscar MAC o IP
+     ios_command: 
+        commands: "show arp | i {{ filter }}"
+     register: output
+
+   - name: Mostrar resultados
+     debug: msg="{{output.stdout_lines}}"
+

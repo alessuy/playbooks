@@ -1,0 +1,58 @@
+---
+
+- hosts: VD
+  gather_facts: false
+  tasks:
+   - name: CONFIGURAR ISE-SRV-GROUPS
+     ios_config:
+      lines:
+        - server name ISE-DCP
+        - server name ISE-DCL
+      parents: aaa group server tacacs+ ISE
+
+   - name: CONFIGURAR ISE-AAA
+     ios_config:
+      lines:
+        - aaa authentication login AAA group ISE local
+        - aaa authentication enable default group ISE enable
+        - aaa authorization exec AAA group ISE local
+        - aaa authorization commands 0 AAA group ISE local
+        - aaa authorization commands 1 AAA group ISE local
+        - aaa authorization commands 15 AAA group ISE local
+        - aaa authorization config-commands
+
+
+   - name: CONFIGURAR ISE-DCP-SERVER
+     ios_config:
+      lines:
+        - address ipv4 10.30.1.50
+        - key 7 000916080D4808091C
+      parents: tacacs server ISE-DCP
+
+   - name: CONFIGURAR ISE-DCL-SERVER
+     ios_config:
+      lines:
+        - address ipv4 10.30.1.100
+        - key 7 151F0E020D39282B3B 
+      parents: tacacs server ISE-DCL
+
+   - name: CONFIGURAR LINE CON0
+     ios_config:
+      lines:
+        - privilege level 15
+        - login authentication AAA
+      parents: line con 0
+
+
+   - name: CONFIGURAR LINE VTY
+     ios_config:
+      lines:
+        - authorization commands 0 AAA
+        - authorization commands 1 AAA
+        - authorization commands 15 AAA
+        - authorization exec AAA
+        - login authentication AAA
+        - transport input ssh
+      parents: line vty 0 4
+
+

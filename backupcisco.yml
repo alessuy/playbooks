@@ -1,0 +1,48 @@
+---
+
+- hosts: localhost
+  vars: 
+    dir: "/root/PRODUCCION/CISCO/Respaldos-Cisco"
+
+  tasks:
+   - name: Obtener Fecha
+     setup:
+       filter: "ansible_date_time"
+       gather_subset: "!all"
+
+   - name: Store DTG as fact
+     set_fact:
+       DTG: "{{ ansible_date_time.date }}"
+
+   - name: Crear Directorio {{hostvars.localhost.DTG}}
+     file:
+      path: '{{ dir + "/" + hostvars.localhost.DTG}}'
+      state: directory
+  run_once: true
+
+- hosts: TODOS
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/CISCO/Respaldos-Cisco" 
+    command_list:
+      - show running
+      - show version
+      - show clock
+      - show system mtu
+
+  tasks:
+   - name: Obtener comandos
+     ios_command:
+       commands: "{{ command_list }}"
+     register: showoutput
+
+   - name: "Agrupar todas las salidas de comandos"
+     template:
+       src: "{{ item.src }}"
+       dest: "{{ item.dest }}"
+     with_items:
+       - {src: 'get_run.j2',dest: '{{ dir + "/" + hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}.run'}
+       - {src: 'get_ver.j2',dest: '{{ dir + "/" + hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}.ver'}
+       - {src: 'get_clk.j2',dest: '{{ dir + "/" + hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}.clk'}
+       - {src: 'get_mtu.j2',dest: '{{ dir + "/" + hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}.mtu'}
+
