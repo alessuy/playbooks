@@ -1,0 +1,25 @@
+---
+
+- hosts: sw-dcl
+  gather_facts: false
+  vars:
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int te 1/2/8 | i Description
+      - show int te 1/2/8 human-read | i CRC
+      - show int te 1/2/8 human-read | i bits 
+      - show int te 2/2/7 | i Description
+      - show int te 2/2/7 human-read | i CRC
+      - show int te 2/2/7 human-read | i bits
+ 
+  tasks:
+   - name: OBTENER COMANDOS SW-DCL
+     ios_command:
+       commands: "{{ command_list }}"
+     register: showoutput
+
+   - name: "AGRUPAR SALIDAS"
+     debug: "{{ showoutput.stdout_lines }}"
+
