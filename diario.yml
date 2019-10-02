@@ -1,0 +1,211 @@
+---
+
+- hosts: sw-dcl
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/DIARIO/Reporte" 
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int te 1/2/8 | i Description
+      - show int te 1/2/8 human-read | i CRC
+      - show int te 1/2/8 human-read | i bits 
+      - show int te 2/2/7 | i Description
+      - show int te 2/2/7 human-read | i CRC
+      - show int te 2/2/7 human-read | i bits
+      - show int te 1/2/2 | i Description
+      - show int te 1/2/2 human-read | i CRC
+      - show int te 1/2/2 human-read | i bits
+      - show int te 2/2/2 | i Description
+      - show int te 2/2/2 human-read | i CRC
+      - show int te 2/2/2 human-read | i bits
+      - show int te 1/2/3 | i Description
+      - show int te 1/2/3 human-read | i CRC
+      - show int te 1/2/3 human-read | i bits
+      - show int te 2/2/3 | i Description
+      - show int te 2/2/3 human-read | i CRC
+      - show int te 2/2/3 human-read | i bits
+      - show int te 1/2/4 | i Description
+      - show int te 1/2/4 human-read | i CRC
+      - show int te 1/2/4 human-read | i bits
+      - show int te 2/2/4 | i Description
+      - show int te 2/2/4 human-read | i CRC
+      - show int te 2/2/4 human-read | i bits
+      - show int te 1/1/27 | i Description
+      - show int te 1/1/27 human-read | i CRC
+      - show int te 1/1/27 human-read | i bits
+      - show int te 1/1/26 | i Description
+      - show int te 1/1/26 human-read | i CRC
+      - show int te 1/1/26 human-read | i bits
+      - show int te 2/1/28 | i Description
+      - show int te 2/1/28 human-read | i CRC
+      - show int te 2/1/28 human-read | i bits
+      - show int te 1/2/7 | i Description
+      - show int te 1/2/7 human-read | i CRC
+      - show int te 1/2/7 human-read | i bits
+ 
+  tasks:
+   - name: OBTENER COMANDOS SW-DCL
+     ios_command:
+       commands: "{{ command_list }}"
+     register: output
+
+   - name: "AGRUPAR SALIDAS"
+     local_action: copy content={{ output.stdout_lines }} dest=/tmp/{{ inventory_hostname }}
+
+
+- hosts: sw-dcp
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/DIARIO/Reporte" 
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int te 1/2/8 | i Description
+      - show int te 1/2/8 human-read | i CRC
+      - show int te 1/2/8 human-read | i bits 
+      - show int te 2/2/7 | i Description
+      - show int te 2/2/7 human-read | i CRC
+      - show int te 2/2/7 human-read | i bits
+      - show int te 1/2/2 | i Description
+      - show int te 1/2/2 human-read | i CRC
+      - show int te 1/2/2 human-read | i bits
+      - show int te 1/2/3 | i Description
+      - show int te 1/2/3 human-read | i CRC
+      - show int te 1/2/3 human-read | i bits
+      - show int te 1/1/27 | i Description
+      - show int te 1/1/27 human-read | i CRC
+      - show int te 1/1/27 human-read | i bits
+      - show int te 1/1/26 | i Description
+      - show int te 1/1/26 human-read | i CRC
+      - show int te 1/1/26 human-read | i bits
+      - show int te 1/1/28 | i Description
+      - show int te 1/1/28 human-read | i CRC
+      - show int te 1/1/28 human-read | i bits
+      - show int te 1/2/1 | i Description
+      - show int te 1/2/1 human-read | i CRC
+      - show int te 1/2/1 human-read | i bits
+ 
+  tasks:
+   - name: OBTENER COMANDOS SW-DCP
+     ios_command:
+       commands: "{{ command_list }}"
+     register: output
+
+   - name: "AGRUPAR SALIDAS"
+     local_action: copy content={{ output.stdout_lines }} dest=/tmp/{{ inventory_hostname }}
+
+     
+- hosts: sw-bb-cdv
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/DIARIO/Reporte" 
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int gi 1/0/12 | i Description
+      - show int gi 1/0/12 human-read | i CRC
+      - show int gi 1/0/12 human-read | i bits 
+      - show int gi 2/1/1 | i Description
+      - show int gi 2/1/1 human-read | i CRC
+      - show int gi 2/1/1 human-read | i bits
+ 
+  tasks:
+   - name: OBTENER COMANDOS SW-BB-CDV
+     ios_command:
+       commands: "{{ command_list }}"
+     register: output
+
+   - name: "AGRUPAR SALIDAS"
+     local_action: copy content={{ output.stdout_lines }} dest=/tmp/{{ inventory_hostname }}
+
+
+- hosts: sw-bl-cdv
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/DIARIO/Reporte" 
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int gi 1/1/1 | i Description
+      - show int gi 1/1/1 human-read | i CRC
+      - show int gi 1/1/1 human-read | i bits 
+      - show int gi 2/1/1 | i Description
+      - show int gi 2/1/1 human-read | i CRC
+      - show int gi 2/1/1 human-read | i bits
+      - show int gi 2/1/2 | i Description
+      - show int gi 2/1/2 human-read | i CRC
+      - show int gi 2/1/2 human-read | i bits
+
+      
+  tasks:
+   - name: OBTENER COMANDOS SW-BL-CDV
+     ios_command:
+       commands: "{{ command_list }}"
+     register: output
+
+   - name: "AGRUPAR SALIDAS"
+     local_action: copy content={{ output.stdout_lines }} dest=/tmp/{{ inventory_hostname }}  
+
+
+- hosts: sw-cc-cdv
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/DIARIO/Reporte" 
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int gi 2/1/1 | i Description
+      - show int gi 2/1/1 human-read | i CRC
+      - show int gi 2/1/1 human-read | i bits 
+      - show int gi 1/1/2 | i Description
+      - show int gi 1/1/2 human-read | i CRC
+      - show int gi 1/1/2 human-read | i bits
+      - show int gi 2/1/2 | i Description
+      - show int gi 2/1/2 human-read | i CRC
+      - show int gi 2/1/2 human-read | i bits
+
+      
+  tasks:
+   - name: OBTENER COMANDOS SW-CC-CDV
+     ios_command:
+       commands: "{{ command_list }}"
+     register: output
+
+   - name: "AGRUPAR SALIDAS"
+     local_action: copy content={{ output.stdout_lines }} dest=/tmp/{{ inventory_hostname }}    
+
+
+- hosts: sw-hb-cdv
+  gather_facts: false
+  vars:
+    dir: "/root/PRODUCCION/DIARIO/Reporte" 
+    command_list:
+      - show clock
+      - show processes cpu | i Core
+      - show int status | i not
+      - show int te 2/1/7 | i Description
+      - show int te 2/1/7 human-read | i CRC
+      - show int te 2/1/7 human-read | i bits 
+      - show int te 1/1/7 | i Description
+      - show int te 1/1/7 human-read | i CRC
+      - show int te 1/1/7 human-read | i bits
+      - show int te 1/1/3 | i Description
+      - show int te 1/1/3 human-read | i CRC
+      - show int te 1/1/3 human-read | i bits
+
+      
+  tasks:
+   - name: OBTENER COMANDOS SW-HB-DV
+     ios_command:
+       commands: "{{ command_list }}"
+     register: output
+
+   - name: "AGRUPAR SALIDAS"
+     local_action: copy content={{ output.stdout_lines }} dest=/tmp/{{ inventory_hostname }}
+
